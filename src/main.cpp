@@ -83,11 +83,11 @@ void handleSetSettings()
 
   if (doc.containsKey("speed"))
   {
-    speed = doc["speed"];
+    speed = doc["speed"].as<int>();
   }
   if (doc.containsKey("brightness"))
   {
-    brightness = doc["brightness"];
+    brightness = doc["brightness"].as<int>();
   }
   if (doc.containsKey("mode"))
   {

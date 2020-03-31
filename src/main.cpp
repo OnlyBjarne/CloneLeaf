@@ -43,9 +43,9 @@ const int PANEL_LEDS[NUMPANELS][NUM_LEDS_IN_PANEL] =
 CRGB leds[NUMPANELS * NUM_LEDS_IN_PANEL];
 int speed = 50;
 int brightness = 100;
-const char *mode = "Random";
-String modeString = "Random";
-String oldModeString = "Random";
+const char *mode = "Rainbow";
+String modeString = "Rainbow";
+String oldModeString = "Rainbow";
 
 void setPanelColor(int panel, int size, CRGB color)
 {

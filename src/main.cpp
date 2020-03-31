@@ -14,7 +14,7 @@
 
 //panels config
 #define NUMPANELS 9
-#define NUM_LEDS_IN_PANEL 3
+#define NUM_LEDS_IN_PANEL 6
 const int NUM_LEDS = NUMPANELS * NUM_LEDS_IN_PANEL;
 
 //fade/flash
@@ -184,21 +184,25 @@ void loop()
   ArduinoOTA.handle();
   server.handleClient();
 
-  //effects
-
+  EVERY_N_MILLIS(20) { gHue++; }
   EVERY_N_MILLISECONDS(1000 / speed)
   {
+    Serial.print("Current effect");
+    Serial.println(modeString);
+
     if (modeString == "Rainbow")
-    { //Single Dot Down
-      rainbow();
-    }
-    if (modeString == "Dot")
     {
-      sinelon();
+      rainbow();
     }
     if (modeString == "Rainbow2")
     {
       rainbowWithGlitter();
     }
+    if (modeString == "Dot")
+    {
+      sinelon();
+    }
+
+    FastLED.show();
   }
 }

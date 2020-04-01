@@ -41,6 +41,9 @@ const int PANEL_LEDS[NUMPANELS][NUM_LEDS_IN_PANEL] =
 //Fast led settings
 #define DATA_PIN D1
 CRGB leds[NUMPANELS * NUM_LEDS_IN_PANEL];
+const char *state = "on";
+String stateString = "on";
+String oldStateString = "on";
 int speed = 50;
 int brightness = 100;
 const char *mode = "Rainbow";
@@ -58,8 +61,9 @@ ESP8266WebServer server(80);
 
 void handleIndex()
 {
-  server.send(200, "text/html", MAIN_page);
+  server.send(200, "text/html", INDEX_HTML);
 }
+
 void handleGetSettings()
 {
   String settings;
@@ -67,6 +71,7 @@ void handleGetSettings()
   doc["speed"] = speed;
   doc["brightness"] = brightness;
   doc["mode"] = modeString.c_str();
+  doc["state"] = stateString.c_str();
   serializeJson(doc, settings);
   server.send(200, "application/json", settings);
 }
@@ -80,14 +85,19 @@ void handleSetSettings()
   {
     Serial.println("Failed to parse json");
   }
-
+  if (doc.containsKey("state"))
+  {
+    state = doc["state"];
+    oldStateString = stateString;
+    stateString = state;
+  }
   if (doc.containsKey("speed"))
   {
-    speed = doc["speed"].as<int>();
+    speed = doc["speed"];
   }
   if (doc.containsKey("brightness"))
   {
-    brightness = doc["brightness"].as<int>();
+    brightness = doc["brightness"];
   }
   if (doc.containsKey("mode"))
   {
@@ -96,25 +106,7 @@ void handleSetSettings()
     Serial.println(modeString);
   }
 }
-void setColor(int inR, int inG, int inB)
-{
-  for (int i = 0; i < NUM_LEDS; i++)
-  {
-    leds[i].red = inR;
-    leds[i].green = inG;
-    leds[i].blue = inB;
-  }
 
-  FastLED.show();
-
-  Serial.println("Setting LEDs:");
-  Serial.print("r: ");
-  Serial.print(inR);
-  Serial.print(", g: ");
-  Serial.print(inG);
-  Serial.print(", b: ");
-  Serial.println(inB);
-}
 void setup()
 {
   Serial.begin(115200);
@@ -178,18 +170,16 @@ void setup()
 }
 
 #include <effects.h>
-
+int oldMillis = 0;
 void loop()
 {
+  static CEveryNMilliseconds FPS(1000 / speed);
   ArduinoOTA.handle();
   server.handleClient();
-
   EVERY_N_MILLIS(20) { gHue++; }
-  EVERY_N_MILLISECONDS(1000 / speed)
+  EVERY_N_MILLIS_I(timingObj, 0)
   {
-    Serial.print("Current effect");
-    Serial.println(modeString);
-
+    timingObj.setPeriod(1000 / speed);
     if (modeString == "Rainbow")
     {
       rainbow();
@@ -202,7 +192,7 @@ void loop()
     {
       sinelon();
     }
-
-    FastLED.show();
   }
+
+  FastLED.show();
 }

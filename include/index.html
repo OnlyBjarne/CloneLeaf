@@ -12,29 +12,42 @@
 <body>
     <div id="app">
 
-        <h1>{{ message }}</h1><br>
-        <label for="mode">Mode</label>
-        <select id="modesList" v-model="settings.mode">
-            <option v-for="mode in modesList" :key="mode" style="text-decoration: dotted;">{{mode}}</option>
-        </select>
+        <h1 name="header">{{ message }}</h1><br>
+        <div>
+            <label for="state">Power</label>
+            <span id="state">
+                <button @click="$set(settings,'state','on')">On</button>
+                <button @click="$set(settings,'state','off')">Off</button>
+            </span>
+        </div>
         <br>
-        <span v-if="settings.mode==='Solid'">
-            <label for="panel">Panel</label>
-            <select id="panel" v-model="selectedPanel">
-                <option v-for="(panel,index) in panels">{{index}}</option>
-            </select>
-            <label for="colorInput">Color</label>
-            <input v-if="selectedPanel" v-model="panels[selectedPanel]" type="color">
-        </span>
         <br>
+        <div v-if="settings.state==='on'">
 
-        <br>
-        <label for="speed">Speed</label>
-        <input id="speed" type="range" min="10" max="100" v-model="settings.speed">
-        <label for="speed">{{settings.speed}}</label><br>
-        <label for="brightness">Brightness</label>
-        <input id="brightness" type="range" min="0" max="255" v-model="settings.brightness">
-        <label for="brightness">{{settings.brightness}}</label>
+            <label for="mode">Mode</label>
+            <select id="modesList" v-model="settings.mode">
+                <option v-for="mode in modesList" :key="mode" style="text-decoration: dotted;">{{mode}}</option>
+            </select>
+            <br>
+            <br>
+            <span v-if="settings.mode==='Solid'">
+                <label for="panel">Panel</label>
+                <select id="panel" v-model="selectedPanel">
+                    <option v-for="(panel,index) in panels">{{index}}</option>
+                </select>
+                <label for="colorInput">Color</label>
+                <input v-if="selectedPanel" v-model="panels[selectedPanel]" type="color">
+            </span>
+            <br>
+            <br>
+            <label for="speed">Speed</label>
+            <input id="speed" type="range" min="10" max="100" :value="settings.speed" @change="speedChanged">
+            <label for="speed">{{settings.speed}}</label><br>
+            <label for="brightness">Brightness</label>
+            <input id="brightness" type="range" min="0" max="255" :value="settings.brightness"
+                @change="brightnessChanged">
+            <label for="brightness">{{settings.brightness}}</label>
+        </div>
         <br>
         <br>
         <br>
@@ -45,10 +58,11 @@
         var app = new Vue({
             el: '#app',
             data: {
-                message: 'Hello CloneLeaf!',
+                message: 'Hello cloneleaf!',
                 selectedPanel: 0,
                 selectedLED: 0,
                 settings: {
+                    state: "off",
                     speed: 10,
                     brightness: 70,
                     mode: "Running dot",
@@ -62,7 +76,7 @@
             watch: {
                 settings: {
                     handler() {
-                        this.edited = true;
+                        this.save();
                     }, deep: true
                 }
             },
@@ -70,12 +84,16 @@
                 await fetch("/getsettings").then((response) => {
                     return response.json()
                 }).then((data) => {
-                    this.settings.speed = data.speed;
-                    this.settings.brightness = data.brightness;
-                    this.settings.mode = data.mode;
+                    this.settings = data;
                 });
             },
             methods: {
+                speedChanged(value) {
+                    this.settings.speed = value.target.valueAsNumber;
+                },
+                brightnessChanged(value) {
+                    this.settings.brightness = value.target.valueAsNumber;
+                },
                 async save() {
                     this.edited = false;
                     axios.post("/setsettings", this.settings).then(response => {

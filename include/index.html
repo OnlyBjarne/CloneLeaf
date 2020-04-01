@@ -36,7 +36,12 @@
                     <option v-for="(panel,index) in panels">{{index}}</option>
                 </select>
                 <label for="colorInput">Color</label>
+                <select id="colorInput" v-model="settings.color">
+                    <option v-for="color in colorInput" :key="color" style="text-decoration: dotted;">{{color}}</option>
+                </select>
+                <!-- 
                 <input v-if="selectedPanel" v-model="panels[selectedPanel]" type="color">
+                -->
             </span>
             <br>
             <br>
@@ -44,8 +49,7 @@
             <input id="speed" type="range" min="10" max="100" :value="settings.speed" @change="speedChanged">
             <label for="speed">{{settings.speed}}</label><br>
             <label for="brightness">Brightness</label>
-            <input id="brightness" type="range" min="0" max="255" :value="settings.brightness"
-                @change="brightnessChanged">
+            <input id="brightness" type="range" min="0" max="255" :value="settings.brightness" @change="brightnessChanged">
             <label for="brightness">{{settings.brightness}}</label>
         </div>
         <br>
@@ -68,7 +72,10 @@
                     mode: "Running dot",
                 },
                 modesList: [
-                    "Random", "Rainbow", "Solid", "Siren", "Breathing", "Running dot", "Sparkle"
+                    "Random", "Rainbow", "RainbowGlitter", "Solid", "Siren", "Breathing", "Running dot", "Sparkle"
+                ],
+                colorInput: [
+                    "Green"
                 ],
                 edited: false,
                 panels: []
@@ -77,7 +84,8 @@
                 settings: {
                     handler() {
                         this.save();
-                    }, deep: true
+                    },
+                    deep: true
                 }
             },
             async beforeCreate() {

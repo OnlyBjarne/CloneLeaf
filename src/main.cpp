@@ -180,18 +180,40 @@ void loop()
   EVERY_N_MILLIS_I(timingObj, 0)
   {
     timingObj.setPeriod(1000 / speed);
+    if (modeString == "Random")
+    {
+      confetti();
+    }
     if (modeString == "Rainbow")
     {
       rainbow();
     }
-    if (modeString == "Rainbow2")
+    if (modeString == "RainbowGlitter")
     {
       rainbowWithGlitter();
     }
-    if (modeString == "Dot")
+    if (modeString == "Solid")
+    {
+      colorize();
+    }
+    if (modeString == "Siren")
+    {
+      juggle();
+    }
+    if (modeString == "Breathing")
+    {
+      bpm();
+    }
+    if (modeString == "Running dot")
     {
       sinelon();
     }
+    if (modeString == "Sparkle")
+    {
+      addGlitter(1);
+    }
+
+
   }
 
   FastLED.show();

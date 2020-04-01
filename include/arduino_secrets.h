@@ -1,8 +1,8 @@
 //Debug
 #define debug true
 //WIFI parameters
-#define SECRET_SSID "WiBelieveICanFi"
-#define SECRET_PWD "Kinasjakk5"
+#define SECRET_SSID "Apartment 501"
+#define SECRET_PWD "Coffeetable"
 
 #define AP_HOSTNAME "Rogers CloneLeaf"
 //#define AP_PWD "cloneleaf"

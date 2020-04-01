@@ -56,3 +56,8 @@ void juggle()
         dothue += 32;
     }
 }
+
+void colorize()
+{
+    fill_solid(leds, NUM_LEDS, CRGB::Green);
+}

@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <arduino_secrets.h>
 #include <FastLED.h>
+
 void setupWifi()
 {
     WiFi.begin(SECRET_SSID, SECRET_PWD);

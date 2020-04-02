@@ -8,7 +8,7 @@
 
 #include <led_config.h>
 #include <arduino_secrets.h>
-#include <wifi.h>
+#include <wifi_config.h>
 #include <html_index.h>
 
 //wifi and webserver configs

@@ -37,6 +37,12 @@ const char *mode = "Rainbow";
 String modeString = "Rainbow";
 String oldModeString = "Rainbow";
 
+void setupLeds()
+{
+    FastLED.addLeds<WS2811, DATA_PIN, GRB>(leds, NUM_LEDS);
+    FastLED.setBrightness(150);
+}
+
 void setPanelColor(int panel, int size, CRGB color)
 {
     for (int led = 0; led < size; led++)

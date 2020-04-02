@@ -7,62 +7,159 @@
     <title>CloneLeaf</title>
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;900&display=swap" rel="stylesheet">
+
 </head>
+<style>
+    html {
+        background-color: #2b2831;
+        color: white;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    h1 {
+        font-weight: 500;
+    }
+
+    button {
+        background-color: lightgray;
+        /* Green */
+        border: gray solid 1px;
+        color: black;
+        padding: 5px 15px;
+        text-align: left;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button.active {
+        color: white;
+        background-color: #0099ff;
+    }
+
+    .buttonGroup {
+        font-size: 0;
+        display: inline;
+    }
+
+    .buttonToggle {
+        border: 1px gray solid;
+    }
+
+    .buttonToggle:first-child {
+        display: inline-block;
+        margin-right: 0;
+        border-radius: 10px 0 0 10px;
+    }
+
+    .buttonToggle:last-child {
+        display: inline-block;
+        border-radius: 0 10px 10px 0;
+    }
+
+    .content {
+        margin: auto;
+        max-width: 500px;
+        border: white solid 2px;
+        border-radius: 10px;
+    }
+
+    .power {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .settings {
+        display: grid;
+        align-items: center;
+    }
+
+    .settings>div {
+        display: grid;
+        grid-template-columns: 100px auto 64px;
+        row-gap: 10px;
+        padding: 10px;
+        width: 100%;
+
+    }
+
+    .settings>div>* {
+        float: right;
+        align-self: center;
+    }
+
+    input {
+        padding: 10px;
+        background-color: inherit;
+    }
+</style>
 
 <body>
     <div id="app">
-
-        <h1 name="header">{{ message }}</h1><br>
         <div>
-            <label for="state">Power</label>
-            <span id="state">
-                <button @click="$set(settings,'state','on')">On</button>
-                <button @click="$set(settings,'state','off')">Off</button>
-            </span>
+            <h1 name="header" style="text-align: center;">{{ message }}</h1>
         </div>
-        <br>
-        <br>
-        <div v-if="settings.state==='on'">
+        <div class="content">
 
-            <label for="mode">Mode</label>
-            <select id="modesList" v-model="settings.mode">
-                <option v-for="mode in modesList" :key="mode" style="text-decoration: dotted;">{{mode}}</option>
-            </select>
-            <br>
-            <br>
-            <span v-if="settings.mode==='Solid'">
-                <label for="panel">Panel</label>
-                <select id="panel" v-model="selectedPanel">
-                    <option v-for="(panel,index) in panels">{{index}}</option>
-                </select>
-                <label for="colorInput">Color</label>
-                <select id="colorInput" v-model="settings.color">
-                    <option v-for="color in colorInput" :key="color" style="text-decoration: dotted;">{{color}}</option>
-                </select>
-                <!-- 
-                <input v-if="selectedPanel" v-model="panels[selectedPanel]" type="color">
-                -->
-            </span>
-            <br>
-            <br>
-            <label for="speed">Speed</label>
-            <input id="speed" type="range" min="10" max="100" :value="settings.speed" @change="speedChanged">
-            <label for="speed">{{settings.speed}}</label><br>
-            <label for="brightness">Brightness</label>
-            <input id="brightness" type="range" min="0" max="255" :value="settings.brightness" @change="brightnessChanged">
-            <label for="brightness">{{settings.brightness}}</label>
+            <div class="power">
+                <label for="state">Power</label>
+                <div id="state" class="buttonGroup">
+                    <button class="buttonToggle" :class="settings.state==='off' ? 'active' : ''"
+                        @click="$set(settings,'state','off')">Off</button>
+                    <button class="buttonToggle" :class="settings.state==='on' ? 'active' : ''"
+                        @click="$set(settings,'state','on')">On</button>
+                </div>
+            </div>
+
+            <div v-if="settings.state==='on'" class="settings">
+                <div>
+                    <label for="mode">Mode</label>
+                    <select id="modesList" v-model="settings.mode">
+                        <option v-for="mode in modesList" :key="mode" style="text-decoration: dotted;">{{mode}}
+                        </option>
+                    </select>
+
+                </div>
+                <div v-if="settings.mode==='Solid'">
+                    <div>
+
+                        <label for="panel">Panel</label>
+                        <select id="panel" v-model="selectedPanel">
+                            <option v-for="(panel,index) in panels">{{index}}</option>
+                        </select>
+                    </div>
+                    <div>
+
+                        <label v-if="selectedPanel" for="colorInput">Color</label>
+                        <input v-if="selectedPanel" v-model="panels[selectedPanel]" type="color">
+                    </div>
+                </div>
+                <div>
+
+                    <label for="speed">Speed</label>
+                    <input id="speed" type="range" min="10" max="100" :value="settings.speed" @change="speedChanged">
+                    <label for="speed">{{settings.speed}}</label>
+                </div>
+                <div>
+
+                    <label for="brightness">Brightness</label>
+                    <input id="brightness" type="range" min="10" max="255" :value="settings.brightness"
+                        @change="brightnessChanged">
+                    <label for="brightness">{{settings.brightness}}</label>
+                </div>
+            </div>
         </div>
-        <br>
-        <br>
-        <br>
-        <button v-if="edited" @click="save">Save</button>
     </div>
 
     <script>
         var app = new Vue({
             el: '#app',
             data: {
-                message: 'Hello cloneleaf!',
+                message: 'CloneLeaf settings',
                 selectedPanel: 0,
                 selectedLED: 0,
                 settings: {
@@ -78,7 +175,7 @@
                     "Green"
                 ],
                 edited: false,
-                panels: []
+                panels: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             },
             watch: {
                 settings: {
@@ -113,6 +210,7 @@
             },
         })
     </script>
+
 </body>
 
 </html>

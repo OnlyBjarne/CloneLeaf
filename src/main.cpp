@@ -110,7 +110,7 @@ void handleSetSettings()
 void setup()
 {
   Serial.begin(115200);
-  FastLED.addLeds<WS2812B, DATA_PIN>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2811, DATA_PIN, GRB>(leds, NUM_LEDS);
   FastLED.setBrightness(150);
   WiFi.begin(SECRET_SSID, SECRET_PWD);
   WiFi.hostname(AP_HOSTNAME);
@@ -212,8 +212,6 @@ void loop()
     {
       addGlitter(1);
     }
-
-
   }
 
   FastLED.show();

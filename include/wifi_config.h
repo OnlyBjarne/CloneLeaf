@@ -2,6 +2,8 @@
 
 void setupWifi()
 {
+    EEPROM.begin(512);
+    delay(10);
     WiFi.hostname(AP_HOSTNAME);
     WiFi.begin(SECRET_SSID, SECRET_PWD);
 
@@ -9,12 +11,12 @@ void setupWifi()
     {
         if (debug)
             Serial.print(".");
-        setPanelColor(3, 3, CRGB::Red);
+        //setPanelColor(3, 3, CRGB::Red);
         FastLED.show();
         digitalWrite(LED_BUILTIN, HIGH);
         delay(250);
         digitalWrite(LED_BUILTIN, LOW);
-        setPanelColor(3, 3, CRGB::Black);
+        //setPanelColor(3, 3, CRGB::Black);
         delay(250);
     }
     if (WiFi.status() == WL_CONNECTED)

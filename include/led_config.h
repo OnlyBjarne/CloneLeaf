@@ -1,6 +1,6 @@
 #include <FastLED.h>
 //panels config
-#define NUMPANELS 9
+#define NUMPANELS 2
 #define NUM_LEDS_IN_PANEL 6
 const int NUM_LEDS = NUMPANELS * NUM_LEDS_IN_PANEL;
 
@@ -12,18 +12,6 @@ uint8_t thishue = 0; // Starting hue value.
 uint8_t deltahue = 10;
 
 //LED -> PANEL mapping
-const int PANEL_LEDS[NUMPANELS][NUM_LEDS_IN_PANEL] =
-    {
-        {17, 16, 18}, //panel 0
-        {15, 11, 19}, //panel 1
-        {14, 13, 12}, //panel 2
-        {20, 10, 21}, //panel 3
-        {9, 8, 22},   //panel 4
-        {23, 7, 24},  //panel 5
-        {6, 2, 25},   //panel 6
-        {5, 4, 3},    //panel 7
-        {26, 1, 0},   //panel 8
-};
 
 //Fast led settings
 #define DATA_PIN D1
@@ -32,17 +20,17 @@ const char *state = "on";
 String stateString = "on";
 String oldStateString = "on";
 int speed = 50;
-int brightness = 100;
+uint8_t brightness = 100;
 const char *mode = "Rainbow";
 String modeString = "Rainbow";
 String oldModeString = "Rainbow";
-
+String randomString = "Random";
 void setupLeds()
 {
     FastLED.addLeds<WS2811, DATA_PIN, GRB>(leds, NUM_LEDS);
     FastLED.setBrightness(150);
 }
-
+/*
 void setPanelColor(int panel, int size, CRGB color)
 {
     for (int led = 0; led < size; led++)
@@ -50,3 +38,4 @@ void setPanelColor(int panel, int size, CRGB color)
         leds[PANEL_LEDS[panel][led]] = color;
     }
 }
+*/

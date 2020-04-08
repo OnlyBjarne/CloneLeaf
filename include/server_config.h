@@ -17,6 +17,12 @@ void handleGetSettings()
     doc["brightness"] = brightness;
     doc["mode"] = modeString.c_str();
     doc["state"] = stateString.c_str();
+    JsonArray effects = doc.createNestedArray("effects");
+    for (size_t i = 0; i < sizeof effectList; i++)
+    {
+        effects.add(effectList[i]);
+    }
+
     serializeJson(doc, settings);
     server.send(200, "application/json", settings);
 }
@@ -46,10 +52,15 @@ void handleSetSettings()
     }
     if (doc.containsKey("mode"))
     {
+        oldModeString = modeString;
         mode = doc["mode"];
         modeString = mode;
-        Serial.println(modeString);
     }
+}
+
+void handleSetDefaults()
+{
+    server.send(200);
 }
 
 void setupServer()
@@ -57,6 +68,7 @@ void setupServer()
     server.on("/", handleIndex);
     server.on("/getsettings", handleGetSettings);
     server.on("/setsettings", handleSetSettings);
+    server.on("/serdefaults", handleSetDefaults);
     server.begin();
     Serial.println("Server started");
 }

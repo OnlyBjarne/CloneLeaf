@@ -141,7 +141,7 @@
                 <div>
 
                     <label for="speed">Speed</label>
-                    <input id="speed" type="range" min="10" max="100" :value="settings.speed" @change="speedChanged">
+                    <input id="speed" type="range" min="10" max="255" :value="settings.speed" @change="speedChanged">
                     <label for="speed">{{settings.speed}}</label>
                 </div>
                 <div>
@@ -171,9 +171,6 @@
                 modesList: [
                     "Random", "Rainbow", "RainbowGlitter", "Solid", "Siren", "Breathing", "Running dot", "Sparkle"
                 ],
-                colorInput: [
-                    "Green"
-                ],
                 edited: false,
                 panels: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             },
@@ -189,7 +186,9 @@
                 await fetch("/getsettings").then((response) => {
                     return response.json()
                 }).then((data) => {
-                    this.settings = data;
+                    this.modesList = data.effects;
+                    delete data.effects;
+                    this.settings = { ...data };
                 });
             },
             methods: {

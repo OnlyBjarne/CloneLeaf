@@ -1,3 +1,6 @@
+String effectList[8] = {
+    "Random", "Rainbow", "Rainbow2", "Dot", "Confetti", "BPM", "Juggle", "Solid all"};
+
 void rainbow()
 {
     // FastLED's built-in rainbow generator
@@ -29,14 +32,14 @@ void sinelon()
 {
     // a colored dot sweeping back and forth, with fading trails
     fadeToBlackBy(leds, NUM_LEDS, 20);
-    int pos = beatsin16(13, 0, NUM_LEDS - 1);
+    int pos = beatsin16(speed, 0, NUM_LEDS - 1);
     leds[pos] += CHSV(gHue, 255, 192);
 }
 
 void bpm()
 {
     // colored stripes pulsing at a defined Beats-Per-Minute (BPM)
-    uint8_t BeatsPerMinute = 62;
+    uint8_t BeatsPerMinute = speed;
     CRGBPalette16 palette = PartyColors_p;
     uint8_t beat = beatsin8(BeatsPerMinute, 64, 255);
     for (int i = 0; i < NUM_LEDS; i++)
@@ -52,7 +55,7 @@ void juggle()
     byte dothue = 0;
     for (int i = 0; i < 8; i++)
     {
-        leds[beatsin16(i + 7, 0, NUM_LEDS - 1)] |= CHSV(dothue, 200, 255);
+        leds[beatsin16(i + speed, 0, NUM_LEDS - 1)] |= CHSV(dothue, 200, 255);
         dothue += 32;
     }
 }
@@ -60,4 +63,9 @@ void juggle()
 void colorize()
 {
     fill_solid(leds, NUM_LEDS, CRGB::Green);
+}
+
+void randomEffect()
+{
+    randomString = effectList[random8(1, sizeof effectList - 1)];
 }

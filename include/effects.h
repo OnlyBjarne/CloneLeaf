@@ -6,6 +6,7 @@ void rainbow()
     // FastLED's built-in rainbow generator
     fill_rainbow(leds, NUM_LEDS, gHue, 7);
 }
+
 void addGlitter(fract8 chanceOfGlitter)
 {
     if (random8() < chanceOfGlitter)
@@ -13,6 +14,7 @@ void addGlitter(fract8 chanceOfGlitter)
         leds[random16(NUM_LEDS)] += CRGB::White;
     }
 }
+
 void rainbowWithGlitter()
 {
     // built-in FastLED rainbow, plus some random sparkly glitter
@@ -34,6 +36,13 @@ void sinelon()
     fadeToBlackBy(leds, NUM_LEDS, 20);
     int pos = beatsin16(speed, 0, NUM_LEDS - 1);
     leds[pos] += CHSV(gHue, 255, 192);
+}
+
+void circleDot() 
+{
+    fadeToBlackBy(leds, NUM_LEDS,20);
+    int pos = beatsin8(speed, 0 ,NUM_LEDS - 1);
+    leds[pos] += CHSV(gHue,255, 192);
 }
 
 void bpm()

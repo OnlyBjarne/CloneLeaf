@@ -1,8 +1,10 @@
-#include <ESP8266WebServer.h>
+#include <WiFi.h>
+#include <WebServer.h>
+
 #include <ArduinoJson.h>
 #include <html_index.h>
 
-ESP8266WebServer server(80);
+WebServer server(80);
 
 void handleIndex()
 {
@@ -29,12 +31,14 @@ void handleGetSettings()
 
 void handleSetSettings()
 {
-    server.send(200);
     StaticJsonDocument<256> doc;
     DeserializationError error = deserializeJson(doc, server.arg("plain"));
+    Serial.println(server.arg("plain"));
+    Serial.println("Received message from client");
     if (error)
     {
         Serial.println("Failed to parse json");
+        server.send(400);
     }
     if (doc.containsKey("state"))
     {
@@ -56,7 +60,9 @@ void handleSetSettings()
         mode = doc["mode"];
         modeString = mode;
     }
+    server.send(200);
 }
+
 
 void handleSetDefaults()
 {
@@ -67,8 +73,8 @@ void setupServer()
 {
     server.on("/", handleIndex);
     server.on("/getsettings", handleGetSettings);
-    server.on("/setsettings", handleSetSettings);
-    server.on("/serdefaults", handleSetDefaults);
+    server.on("/setsettings", HTTP_POST, handleSetSettings);
+    server.on("/reset", handleSetDefaults);
     server.begin();
     Serial.println("Server started");
 }

@@ -23,6 +23,8 @@ void setup()
   Serial.println("Ready");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+
+  ArduinoOTA.begin();
 }
 
 void loop()

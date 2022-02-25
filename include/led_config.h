@@ -1,6 +1,6 @@
 #include <FastLED.h>
 //panels config
-#define NUMPANELS 2
+#define NUMPANELS 8
 #define NUM_LEDS_IN_PANEL 6
 const int NUM_LEDS = NUMPANELS * NUM_LEDS_IN_PANEL;
 
@@ -14,7 +14,8 @@ uint8_t deltahue = 10;
 //LED -> PANEL mapping
 
 //Fast led settings
-#define DATA_PIN D1
+#define DATA_PIN 16
+
 CRGB leds[NUMPANELS * NUM_LEDS_IN_PANEL];
 const char *state = "on";
 String stateString = "on";

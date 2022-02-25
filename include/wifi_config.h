@@ -1,10 +1,10 @@
-#include <ESP8266WiFi.h>
+#include "WiFi.h"
 
 void setupWifi()
 {
     EEPROM.begin(512);
     delay(10);
-    WiFi.hostname(AP_HOSTNAME);
+    WiFi.setHostname(AP_HOSTNAME);
     WiFi.begin(SECRET_SSID, SECRET_PWD);
 
     while (WiFi.status() != WL_CONNECTED)

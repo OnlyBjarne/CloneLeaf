@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.vue": "vue",
+    "functional": "cpp"
+  },
+  "liveServer.settings.multiRootWorkspaceName": "CloneLeaf"
+}
